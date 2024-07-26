@@ -2,6 +2,7 @@ package rookie.android.testandroid.views.test1
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -28,6 +29,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import rookie.android.testandroid.R
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -89,7 +91,37 @@ class DetailMemeActivity : AppCompatActivity() {
         btnSimpan.setOnClickListener(){
             val bitmap = getScreenShotFromView(cardView)
             if (bitmap != null) {
-                saveMediaToStorage(bitmap)
+//                saveMediaToStorage(bitmap)
+                var fileName: String? = "myImage"
+
+                try {
+                    val bx = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bx)
+//                    val byteArray: ByteArray? = bx.toByteArray()
+
+                    val fso: FileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
+                    fso.write(bx.toByteArray())
+                    // remember close file output
+                    fso.close()
+
+
+
+
+//                    val bytes = ByteArrayOutputStream()
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+//                    val fo: FileOutputStream = openFileOutput(fileName, Context.MODE_PRIVATE)
+//                    fo.write(bytes.toByteArray())
+//                    // remember close file output
+//                    fo.close()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    fileName = null
+                }
+
+                val intent = Intent(this, FinalMemeActivity::class.java)
+//                intent.putExtra("BitmapImage", fileName)
+//                intent.putExtra("sdsd", )
+                startActivity(intent)
             }
         }
     }
